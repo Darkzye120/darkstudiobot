@@ -101,7 +101,8 @@ const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMembers
   ]
 });
 
@@ -1647,6 +1648,19 @@ Sua identidade visual começa já!`;
         console.error('[ERRO] Falha ao processar menu de cargo:', error);
       }
     }
+  }
+});
+
+// Evento disparado quando um novo membro entra no servidor da loja
+client.on('guildMemberAdd', async (member) => {
+  try {
+    const welcomeRoleId = '1509221994325999678';
+    
+    // Tenta adicionar o cargo diretamente ao membro
+    await member.roles.add(welcomeRoleId);
+    console.log(`[BOT] Cargo de Boas-vindas (ID: ${welcomeRoleId}) adicionado com sucesso ao membro ${member.user.tag}.`);
+  } catch (error) {
+    console.error(`[ERRO] Falha ao adicionar cargo de boas-vindas ao membro ${member.user.tag}:`, error);
   }
 });
 
