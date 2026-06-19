@@ -45,6 +45,11 @@ interface Product {
 
 // Carrega as configurações do arquivo JSON
 function loadConfig(): Config {
+  // IDs padrão (fallback caso config.json não exista na hospedagem)
+  const DEFAULT_CART_CATEGORY_ID = '1509362153629552730';
+  const DEFAULT_COMMAND_CHANNEL_ID = '1507879967684559040';
+  const DEFAULT_ALLOWED_ROLE_ID = '1509221837094256772';
+
   try {
     if (fs.existsSync(configPath)) {
       const data = fs.readFileSync(configPath, 'utf-8');
@@ -52,15 +57,19 @@ function loadConfig(): Config {
       if (parsed.finalizedCount === undefined) {
         parsed.finalizedCount = 0;
       }
+      // Se os valores estiverem nulos no arquivo, usa os defaults
+      if (!parsed.cartCategoryId) parsed.cartCategoryId = DEFAULT_CART_CATEGORY_ID;
+      if (!parsed.commandChannelId) parsed.commandChannelId = DEFAULT_COMMAND_CHANNEL_ID;
+      if (!parsed.allowedRoleId) parsed.allowedRoleId = DEFAULT_ALLOWED_ROLE_ID;
       return parsed;
     }
   } catch (error) {
     console.error('[ERRO] Falha ao ler config.json, usando padrão vazio:', error);
   }
   return { 
-    allowedRoleId: null,
-    cartCategoryId: null,
-    commandChannelId: null,
+    allowedRoleId: DEFAULT_ALLOWED_ROLE_ID,
+    cartCategoryId: DEFAULT_CART_CATEGORY_ID,
+    commandChannelId: DEFAULT_COMMAND_CHANNEL_ID,
     logsChannelId: null,
     finalizedCount: 0
   };
