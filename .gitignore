@@ -1,0 +1,7 @@
+.env
+node_modules/
+build/
+config.json
+products.json
+botvendas/
+*.zip
