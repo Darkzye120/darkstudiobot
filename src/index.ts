@@ -725,7 +725,7 @@ Estes termos são regidos pelas leis da República Federativa do Brasil, especia
         }
 
         // Categoria onde o ticket será criado
-        const parentCategory = config.cartCategoryId || undefined;
+        const parentCategory = config.cartCategoryId || '1509362153629552730';
         const channelName = `ticket-suporte-${interaction.user.username}`;
 
         // Criar canal privado de ticket
@@ -1315,6 +1315,8 @@ Sua identidade visual começa já!`;
   // Trata a seleção de produto no menu dropdown de lançamento
   if (interaction.isStringSelectMenu()) {
     if (interaction.customId === 'ticket_select_option') {
+      // Defer imediatamente para evitar DiscordAPIError[10062] (interação expira em 3s)
+      await interaction.deferReply({ ephemeral: true });
       try {
         const option = interaction.values[0];
         const guild = interaction.guild;
@@ -1348,9 +1350,8 @@ Sua identidade visual começa já!`;
         );
 
         if (existingTicket) {
-          await interaction.reply({
-            content: `❌ Você já possui um ticket aberto em <#${existingTicket.id}>! Feche o ticket atual antes de abrir outro.`,
-            ephemeral: true
+          await interaction.editReply({
+            content: `❌ Você já possui um ticket aberto em <#${existingTicket.id}>! Feche o ticket atual antes de abrir outro.`
           });
           return;
         }
@@ -1358,7 +1359,7 @@ Sua identidade visual começa já!`;
         const config = loadConfig();
 
         // Categoria onde o ticket será criado
-        const parentCategory = config.cartCategoryId || undefined;
+        const parentCategory = config.cartCategoryId || '1509362153629552730';
 
         // Criar canal privado de ticket
         const ticketChannel = await guild.channels.create({
@@ -1430,15 +1431,13 @@ Sua identidade visual começa já!`;
           components: [row]
         });
 
-        await interaction.reply({
-          content: `✅ Seu ticket foi aberto com sucesso em <#${ticketChannel.id}>!`,
-          ephemeral: true
+        await interaction.editReply({
+          content: `✅ Seu ticket foi aberto com sucesso em <#${ticketChannel.id}>!`
         });
       } catch (error) {
         console.error('[ERRO] Falha ao abrir ticket:', error);
-        await interaction.reply({
-          content: '❌ Não foi possível abrir o seu ticket. Por favor, tente novamente ou contate um administrador.',
-          ephemeral: true
+        await interaction.editReply({
+          content: '❌ Não foi possível abrir o seu ticket. Por favor, tente novamente ou contate um administrador.'
         });
       }
       return;
