@@ -725,7 +725,7 @@ Estes termos são regidos pelas leis da República Federativa do Brasil, especia
         }
 
         // Categoria onde o ticket será criado
-        const parentCategory = config.cartCategoryId || '1509362153629552730';
+        const parentCategory = '1509362153629552730';
         const channelName = `ticket-suporte-${interaction.user.username}`;
 
         // Criar canal privado de ticket
@@ -1359,7 +1359,7 @@ Sua identidade visual começa já!`;
         const config = loadConfig();
 
         // Categoria onde o ticket será criado
-        const parentCategory = config.cartCategoryId || '1509362153629552730';
+        const parentCategory = '1509362153629552730';
 
         // Criar canal privado de ticket
         const ticketChannel = await guild.channels.create({
